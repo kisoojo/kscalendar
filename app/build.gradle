@@ -10,8 +10,8 @@ android {
         applicationId "com.zenoation.ksbutton_sample"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 2
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
     }
 
     buildTypes {
