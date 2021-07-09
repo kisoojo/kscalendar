@@ -1,0 +1,3 @@
+include ':KSCalendar'
+include ':app'
+rootProject.name = "kscalendar_sample"
