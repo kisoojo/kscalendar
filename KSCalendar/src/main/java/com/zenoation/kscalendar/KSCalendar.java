@@ -29,6 +29,8 @@ public class KSCalendar extends LinearLayout {
 
     private final int COLUMN_HEIGHT = 60;
 
+    private LinearLayout mLlMonth;
+    private LinearLayout mLlDate;
     private ImageView mIvPrev, mIvNext;
     private TextView mTvTitle;
     private LinearLayout mLlCalendar;
@@ -41,6 +43,7 @@ public class KSCalendar extends LinearLayout {
     private String mTodayStr;
     private int mStartIdx = 0;
     private int mHeight = 0;
+    private boolean mIsMatchHeight = false;
 
     private int mPadding = 0;
     private int mSizeToday, mSizeSchedule;
@@ -52,17 +55,28 @@ public class KSCalendar extends LinearLayout {
 
     public KSCalendar(Context context) {
         super(context);
+        mHeight = Utils.getInstance().getPxFromDp(getContext(), COLUMN_HEIGHT);
         initialize();
     }
 
     public KSCalendar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setHeight(attrs);
         initialize();
     }
 
     public KSCalendar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setHeight(attrs);
         initialize();
+    }
+
+    private void setHeight(AttributeSet attrs) {
+        mHeight = (int) getContext().obtainStyledAttributes(attrs, R.styleable.KSCalendarAttr).getDimension(R.styleable.KSCalendarAttr_rowHeight, Utils.getInstance().getPxFromDp(getContext(), COLUMN_HEIGHT));
+        mIsMatchHeight = getContext().obtainStyledAttributes(attrs, R.styleable.KSCalendarAttr).getBoolean(R.styleable.KSCalendarAttr_matchHeight, false);
+        if (mHeight <= 0) {
+            mHeight = Utils.getInstance().getPxFromDp(getContext(), COLUMN_HEIGHT);
+        }
     }
 
     public void setOnClickPrevListener(OnClickParamListener listener) {
@@ -83,16 +97,26 @@ public class KSCalendar extends LinearLayout {
         //measure(MeasureSpec.EXACTLY, MeasureSpec.EXACTLY);
         width = getMeasuredWidth();
         mSizeToday = width / 7;
+        if (mSizeToday > mHeight) {
+            mSizeToday = mHeight;
+        }
         mSizeToday -= mPadding;
         mSizeSchedule = mSizeToday;
         mSizeSchedule -= mPadding * 2;
+
+        int height = getMeasuredHeight();
+        if (height > 0) {
+
+        }
     }
 
     private void initialize() {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_kcalendar, null);
-        v.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        v.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mLlMonth = v.findViewById(R.id.ll_month);
         mIvPrev = v.findViewById(R.id.iv_prev);
         mIvNext = v.findViewById(R.id.iv_next);
+        mLlDate = v.findViewById(R.id.ll_date);
         mTvTitle = v.findViewById(R.id.tv_title);
         mLlCalendar = v.findViewById(R.id.ll_calendar);
         mIvPrev.setOnClickListener(new OnClickListener() {
@@ -115,6 +139,17 @@ public class KSCalendar extends LinearLayout {
                 }
             }
         });
+
+        LayoutParams params;
+        if (mIsMatchHeight) {
+            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+            params.weight = 1;
+        } else {
+            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
+        }
+        mLlMonth.setLayoutParams(params);
+        mLlDate.setLayoutParams(params);
+
         addView(v);
 
         mCalendar = Calendar.getInstance();
@@ -143,7 +178,7 @@ public class KSCalendar extends LinearLayout {
     }
 
     private void makeCalendar() {
-        mHeight = Utils.getInstance().getPxFromDp(getContext(), COLUMN_HEIGHT);
+        // mHeight = Utils.getInstance().getPxFromDp(getContext(), COLUMN_HEIGHT);
         int year = mCalendar.get(Calendar.YEAR);
         int month = mCalendar.get(Calendar.MONTH);
         String title = String.format(Locale.KOREA, "%d년 %d월", year, month + 1);
@@ -208,7 +243,13 @@ public class KSCalendar extends LinearLayout {
     private void addRow() {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
+        LinearLayout.LayoutParams params;
+        if (mIsMatchHeight) {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+            params.weight = 1;
+        } else {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
+        }
         linearLayout.setLayoutParams(params);
         linearLayout.setGravity(Gravity.CENTER);
         mLlCalendar.addView(linearLayout);

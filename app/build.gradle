@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.zenoation.ksbutton_sample"
+        applicationId "com.zenoation.kscalendar_sample"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 3
