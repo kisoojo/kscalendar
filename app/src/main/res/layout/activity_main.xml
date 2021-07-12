@@ -9,6 +9,5 @@
     <com.zenoation.kscalendar.KSCalendar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:matchHeight="false"
         app:rowHeight="70dp" />
 </LinearLayout>
