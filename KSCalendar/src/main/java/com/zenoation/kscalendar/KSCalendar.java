@@ -43,7 +43,6 @@ public class KSCalendar extends LinearLayout {
     private String mTodayStr;
     private int mStartIdx = 0;
     private int mHeight = 0;
-    private boolean mIsMatchHeight = false;
 
     private int mPadding = 0;
     private int mSizeToday, mSizeSchedule;
@@ -73,7 +72,6 @@ public class KSCalendar extends LinearLayout {
 
     private void setHeight(AttributeSet attrs) {
         mHeight = (int) getContext().obtainStyledAttributes(attrs, R.styleable.KSCalendarAttr).getDimension(R.styleable.KSCalendarAttr_rowHeight, Utils.getInstance().getPxFromDp(getContext(), COLUMN_HEIGHT));
-        mIsMatchHeight = getContext().obtainStyledAttributes(attrs, R.styleable.KSCalendarAttr).getBoolean(R.styleable.KSCalendarAttr_matchHeight, false);
         if (mHeight <= 0) {
             mHeight = Utils.getInstance().getPxFromDp(getContext(), COLUMN_HEIGHT);
         }
@@ -140,13 +138,7 @@ public class KSCalendar extends LinearLayout {
             }
         });
 
-        LayoutParams params;
-        if (mIsMatchHeight) {
-            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
-            params.weight = 1;
-        } else {
-            params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
-        }
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
         mLlMonth.setLayoutParams(params);
         mLlDate.setLayoutParams(params);
 
@@ -243,14 +235,7 @@ public class KSCalendar extends LinearLayout {
     private void addRow() {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams params;
-        if (mIsMatchHeight) {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
-            params.weight = 1;
-        } else {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
-        }
-        linearLayout.setLayoutParams(params);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mHeight));
         linearLayout.setGravity(Gravity.CENTER);
         mLlCalendar.addView(linearLayout);
         mLlRow.add(linearLayout);

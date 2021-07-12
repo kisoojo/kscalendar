@@ -2,6 +2,5 @@
 <resources>
     <declare-styleable name="KSCalendarAttr">
         <attr name="rowHeight" format="dimension" />
-        <attr name="matchHeight" format="boolean" />
     </declare-styleable>
 </resources>
