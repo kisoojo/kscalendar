@@ -11,13 +11,13 @@ __Step 1.__ Add the JitPack repository to your build file
 __Step 2.__ Add the dependency    
     
     dependencies {
-            implementation 'com.github.kisoojo:kscalendar:1.2.0'
+            implementation 'com.github.kisoojo:kscalendar:1.3.0'
     }
 
 
 __How to use__
     
-    <com.zenoation.library.KSCalendar
+    <com.zenoation.KSCalendar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     
